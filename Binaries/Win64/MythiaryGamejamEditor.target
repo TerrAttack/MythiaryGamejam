@@ -21,6 +21,70 @@
 	},
 	"BuildProducts": [
 		{
+			"Path": "$(ProjectDir)/Binaries/Win64/UnrealEditor.modules",
+			"Type": "RequiredResource"
+		},
+		{
+			"Path": "$(ProjectDir)/Binaries/Win64/UnrealEditor-MythiaryGamejam.dll",
+			"Type": "DynamicLibrary"
+		},
+		{
+			"Path": "$(ProjectDir)/Binaries/Win64/UnrealEditor-MythiaryGamejam.pdb",
+			"Type": "SymbolFile"
+		},
+		{
+			"Path": "$(ProjectDir)/Plugins/Developer/RiderLink/Binaries/Win64/UnrealEditor.modules",
+			"Type": "RequiredResource"
+		},
+		{
+			"Path": "$(ProjectDir)/Plugins/Developer/RiderLink/Binaries/Win64/UnrealEditor-RD.dll",
+			"Type": "DynamicLibrary"
+		},
+		{
+			"Path": "$(ProjectDir)/Plugins/Developer/RiderLink/Binaries/Win64/UnrealEditor-RD.pdb",
+			"Type": "SymbolFile"
+		},
+		{
+			"Path": "$(ProjectDir)/Plugins/Developer/RiderLink/Binaries/Win64/UnrealEditor-RiderBlueprint.dll",
+			"Type": "DynamicLibrary"
+		},
+		{
+			"Path": "$(ProjectDir)/Plugins/Developer/RiderLink/Binaries/Win64/UnrealEditor-RiderBlueprint.pdb",
+			"Type": "SymbolFile"
+		},
+		{
+			"Path": "$(ProjectDir)/Plugins/Developer/RiderLink/Binaries/Win64/UnrealEditor-RiderGameControl.dll",
+			"Type": "DynamicLibrary"
+		},
+		{
+			"Path": "$(ProjectDir)/Plugins/Developer/RiderLink/Binaries/Win64/UnrealEditor-RiderGameControl.pdb",
+			"Type": "SymbolFile"
+		},
+		{
+			"Path": "$(ProjectDir)/Plugins/Developer/RiderLink/Binaries/Win64/UnrealEditor-RiderLink.dll",
+			"Type": "DynamicLibrary"
+		},
+		{
+			"Path": "$(ProjectDir)/Plugins/Developer/RiderLink/Binaries/Win64/UnrealEditor-RiderLink.pdb",
+			"Type": "SymbolFile"
+		},
+		{
+			"Path": "$(ProjectDir)/Plugins/Developer/RiderLink/Binaries/Win64/UnrealEditor-RiderLogging.dll",
+			"Type": "DynamicLibrary"
+		},
+		{
+			"Path": "$(ProjectDir)/Plugins/Developer/RiderLink/Binaries/Win64/UnrealEditor-RiderLogging.pdb",
+			"Type": "SymbolFile"
+		},
+		{
+			"Path": "$(ProjectDir)/Plugins/Developer/RiderLink/Binaries/Win64/UnrealEditor-RiderShaderInfoDump.dll",
+			"Type": "DynamicLibrary"
+		},
+		{
+			"Path": "$(ProjectDir)/Plugins/Developer/RiderLink/Binaries/Win64/UnrealEditor-RiderShaderInfoDump.pdb",
+			"Type": "SymbolFile"
+		},
+		{
 			"Path": "$(EngineDir)/Binaries/Win64/AgentInterface.dll",
 			"Type": "RequiredResource"
 		},
@@ -282,10 +346,6 @@
 		},
 		{
 			"Path": "$(EngineDir)/Binaries/Win64/UnrealEditor-Cbor.dll",
-			"Type": "DynamicLibrary"
-		},
-		{
-			"Path": "$(EngineDir)/Binaries/Win64/UnrealEditor-CEF3Utils.dll",
 			"Type": "DynamicLibrary"
 		},
 		{
@@ -1549,10 +1609,6 @@
 			"Type": "DynamicLibrary"
 		},
 		{
-			"Path": "$(EngineDir)/Binaries/Win64/UnrealEditor-WebBrowser.dll",
-			"Type": "DynamicLibrary"
-		},
-		{
 			"Path": "$(EngineDir)/Binaries/Win64/UnrealEditor-WidgetCarousel.dll",
 			"Type": "DynamicLibrary"
 		},
@@ -1686,18 +1742,6 @@
 		},
 		{
 			"Path": "$(EngineDir)/Plugins/Animation/IKRig/Binaries/Win64/UnrealEditor-IKRigEditor.dll",
-			"Type": "DynamicLibrary"
-		},
-		{
-			"Path": "$(EngineDir)/Plugins/Bridge/Binaries/Win64/UnrealEditor.modules",
-			"Type": "RequiredResource"
-		},
-		{
-			"Path": "$(EngineDir)/Plugins/Bridge/Binaries/Win64/UnrealEditor-Bridge.dll",
-			"Type": "DynamicLibrary"
-		},
-		{
-			"Path": "$(EngineDir)/Plugins/Bridge/Binaries/Win64/UnrealEditor-MegascansPlugin.dll",
 			"Type": "DynamicLibrary"
 		},
 		{
@@ -2927,21 +2971,17 @@
 		{
 			"Path": "$(EngineDir)/Plugins/XGEController/Binaries/Win64/UnrealEditor-XGEController.dll",
 			"Type": "DynamicLibrary"
-		},
-		{
-			"Path": "$(ProjectDir)/Binaries/Win64/UnrealEditor.modules",
-			"Type": "RequiredResource"
-		},
-		{
-			"Path": "$(ProjectDir)/Binaries/Win64/UnrealEditor-MythiaryGamejam.dll",
-			"Type": "DynamicLibrary"
-		},
-		{
-			"Path": "$(ProjectDir)/Binaries/Win64/UnrealEditor-MythiaryGamejam.pdb",
-			"Type": "SymbolFile"
 		}
 	],
 	"RuntimeDependencies": [
+		{
+			"Path": "$(ProjectDir)/MythiaryGamejam.uproject",
+			"Type": "UFS"
+		},
+		{
+			"Path": "$(ProjectDir)/Plugins/Developer/RiderLink/RiderLink.uplugin",
+			"Type": "UFS"
+		},
 		{
 			"Path": "$(EngineDir)/Binaries/ThirdParty/DbgHelp/dbghelp.dll",
 			"Type": "NonUFS"
@@ -20859,10 +20899,6 @@
 			"Type": "DebugNonUFS"
 		},
 		{
-			"Path": "$(EngineDir)/Binaries/Win64/EpicWebHelper.exe",
-			"Type": "NonUFS"
-		},
-		{
 			"Path": "$(EngineDir)/Binaries/Win64/oo2tex_win64_2.9.5.dll",
 			"Type": "NonUFS"
 		},
@@ -22971,10 +23007,6 @@
 			"Type": "UFS"
 		},
 		{
-			"Path": "$(EngineDir)/Plugins/Bridge/Bridge.uplugin",
-			"Type": "UFS"
-		},
-		{
 			"Path": "$(EngineDir)/Plugins/Cameras/CameraShakePreviewer/CameraShakePreviewer.uplugin",
 			"Type": "UFS"
 		},
@@ -23444,10 +23476,6 @@
 		},
 		{
 			"Path": "$(EngineDir)/Plugins/XGEController/XGEController.uplugin",
-			"Type": "UFS"
-		},
-		{
-			"Path": "$(ProjectDir)/MythiaryGamejam.uproject",
 			"Type": "UFS"
 		}
 	],
