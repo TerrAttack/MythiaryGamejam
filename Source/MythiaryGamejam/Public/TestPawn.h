@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Pawn.h"
+#include "TestGrid.h"
 #include "TestPawn.generated.h"
 
 UCLASS()
@@ -28,10 +29,6 @@ public:
 
 	class ATestGrid* Grid;
 
-	void MoveForward();
-	void MoveBack();
-	void MoveRight();
-	void MoveLeft();
-	void MoveUp();
-	void MoveDown();
+	void MoveInDirection(Direction MoveDirection);
+	DECLARE_DELEGATE_OneParam(FMoveInDirection, Direction);
 };

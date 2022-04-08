@@ -4,37 +4,9 @@
 
 #include "CoreMinimal.h"
 #include "TestCell.h"
+#include "GameData.h"
 #include "GameFramework/Actor.h"
 #include "TestGrid.generated.h"
-
-USTRUCT(BlueprintType)
-struct FVectorInt
-{
-	GENERATED_BODY()
-
-	//~ The following member variable will be accessible by Blueprint Graphs:
-	// This is the tooltip for our test variable.
-	//UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Test Variables")
-	UPROPERTY(EditAnywhere)
-	int32 X;
-	
-	UPROPERTY(EditAnywhere)
-	int32 Y;
-
-	UPROPERTY(EditAnywhere)
-	int32 Z;
-
-	//~ The following member variable will be not accessible by Blueprint Graphs:
-	int32 NativeOnlyMemberVariable;
-
-	/**~
-	* This UObject pointer is not accessible to Blueprint Graphs, but
-	* is visible to UE4's reflection, smart pointer, and garbage collection
-	* systems.
-	*/
-	UPROPERTY()
-	UObject* SafeObjectPointer;
-};
 
 UCLASS()
 class MYTHIARYGAMEJAM_API ATestGrid : public AActor
@@ -54,13 +26,13 @@ public:
 	virtual void Tick(float DeltaTime) override;
 
 	UPROPERTY(EditAnywhere)
-	FVectorInt GridDimensions;
+	FVector GridDimensions;
 
 	UPROPERTY(EditAnywhere)
-	FVectorInt CurrentPosition;
+	FVector CurrentPosition;
 	
 	UPROPERTY(EditAnywhere)
-	FVectorInt TargetPosition;
+	FVector TargetPosition;
 
 	UPROPERTY(EditAnywhere)
 	TSubclassOf<ATestCell> VineCellClass;
@@ -72,8 +44,11 @@ public:
 	TSubclassOf<ATestCell> CellClass;
 	TArray<ATestCell*> Grid;
 
-	ATestCell* GetCellByPosition(FVectorInt Position);
+	ATestCell* GetCellByPosition(FVector Position);
 
 	UFUNCTION()
-	void AttemptMoveInDirection(FVectorInt Direction);
+	void AttemptMoveInDirection(FVector Direction);
+
+	UFUNCTION()
+	bool IsInsideGrid(FVector Position);
 };

@@ -26,9 +26,7 @@ void ATestGrid::BeginPlay()
 			{
 				//UE_LOG(LogTemp, Display, TEXT("%d, %d, %d"), X, Y, Z);
 				FVector Location = FVector(X * 100.f, Y * 100.f, Z * 100.f);
-
 				TSubclassOf<ATestCell> SpawnCell;
-
 				int32 i = FMath::FRandRange(0, 20);
 
 				switch (i)
@@ -44,8 +42,7 @@ void ATestGrid::BeginPlay()
 				AActor* CellActor = GetWorld()->SpawnActor(SpawnCell);
 				ATestCell* Cell = Cast<ATestCell>(CellActor);
 				Grid.Add(Cell);
-				//auto Cell = Cast<ATestCell>(CellActor);
-				//Grid.Add(*Cast<ATestCell>(CellActor));
+
 				CellActor->SetActorLocation(Location);
 				CellActor->SetActorRotation(Rotation);
 			}
@@ -59,88 +56,59 @@ void ATestGrid::Tick(float DeltaTime)
 	Super::Tick(DeltaTime);
 
 }
-/*
-TSubclassOf<ATestCell>* ATestGrid::GetCellByPosition(FVectorInt Position)
-{
-	TSubclassOf<ATestCell>* FoundCell = nullptr;
 
-	if (Position.X >= 0 && Position.X < GridDimensions.X &&
-		Position.Y >= 0 && Position.Y < GridDimensions.Y &&
-		Position.Z >= 0 && Position.Z < GridDimensions.Z)
-	{
-		FoundCell = &Grid[Position.X];
-		//Grid[GridDimensions.X * GridDimensions.Y * Position.Z + GridDimensions.X * Position.Y + Position.X];
-		//int32 Ind = 0;
-		//auto var = Grid[Ind];
-	}
-	
-	return FoundCell;
-}
-*/
-
-ATestCell* ATestGrid::GetCellByPosition(FVectorInt Position)
+ATestCell* ATestGrid::GetCellByPosition(FVector Position)
 {
-	ATestCell* FoundCell = nullptr;
 	int32 ArrayIndex = -1;
-
-	if (Grid.IsEmpty())
+	
+	if (IsInsideGrid(Position))
 	{
-		return nullptr;
+		return  Grid[GridDimensions.X * GridDimensions.Y * Position.Z + GridDimensions.X * Position.Y + Position.X];
 	}
 	
-	if (Position.X >= 0 && Position.X < GridDimensions.X &&
-		Position.Y >= 0 && Position.Y < GridDimensions.Y &&
-		Position.Z >= 0 && Position.Z < GridDimensions.Z)
-	{
-		ArrayIndex = GridDimensions.X * GridDimensions.Y * Position.Z + GridDimensions.X * Position.Y + Position.X;
-		if (ArrayIndex > Grid.Num())
-		{
-			
-		}
-		else
-		{
-			FoundCell = Grid[GridDimensions.X * GridDimensions.Y * Position.Z + GridDimensions.X * Position.Y + Position.X];
-		}
-
-		//Grid[GridDimensions.X * GridDimensions.Y * Position.Z + GridDimensions.X * Position.Y + Position.X];
-		//int32 Ind = 0;
-		//auto var = Grid[Ind];
-	}
-	
-	return FoundCell;
+	return nullptr;
 }
 
-void ATestGrid::AttemptMoveInDirection(FVectorInt Direction)
+void ATestGrid::AttemptMoveInDirection(FVector Direction)
 {
 	UE_LOG(LogTemp, Display, TEXT("ATTEMPTMOVE"));
-	//return;
 	auto CurrentCel = GetCellByPosition(CurrentPosition);
 	TargetPosition = CurrentPosition;
 	TargetPosition.X += Direction.X;
 	TargetPosition.Y += Direction.Y;
 	TargetPosition.Z += Direction.Z;
 	
-	auto TargetCel = GetCellByPosition(TargetPosition);
+	ATestCell* TargetCel = GetCellByPosition(TargetPosition);
+	
 	if (TargetCel == nullptr)
 	{
 		UE_LOG(LogTemp, Display, TEXT("MoveFail!"));
 	}
+	
 	else
 	{
 		UE_LOG(LogTemp, Display, TEXT("MoveSucces!"));
 		CurrentPosition = TargetPosition;
 
-		int32 IndexOfCell = GridDimensions.X * GridDimensions.Y * CurrentPosition.Z + GridDimensions.X * CurrentPosition.Y + CurrentPosition.X;//Grid.IndexOfByKey(TargetCel);
+		const int32 IndexOfCell = GridDimensions.X * GridDimensions.Y * CurrentPosition.Z + GridDimensions.X * CurrentPosition.Y + CurrentPosition.X;
 		Grid.RemoveAt(IndexOfCell);
 		TargetCel->Destroy();
 		
 		AActor* NewCellActor = GetWorld()->SpawnActor(VineCellClass);
-		FVector Location = FVector(CurrentPosition.X * 100.f, CurrentPosition.Y * 100.f, CurrentPosition.Z * 100.f);
-		FRotator Rotation = FRotator::ZeroRotator;
+		const FVector Location = FVector(CurrentPosition.X * 100.f, CurrentPosition.Y * 100.f, CurrentPosition.Z * 100.f);
+		const FRotator Rotation = FRotator::ZeroRotator;
 		NewCellActor->SetActorLocation(Location);
 		NewCellActor->SetActorRotation(Rotation);
-		auto NewCell = Cast<ATestCell>(NewCellActor);
+		ATestCell* NewCell = Cast<ATestCell>(NewCellActor);
 		Grid.Insert(NewCell, IndexOfCell);
 	}
+}
+
+bool ATestGrid::IsInsideGrid(FVector Position)
+{
+	if (Grid.IsEmpty()) return false;
+	return Position.X >= 0 && Position.X < GridDimensions.X &&
+			Position.Y >= 0 && Position.Y < GridDimensions.Y &&
+			Position.Z >= 0 && Position.Z < GridDimensions.Z;
 }
 

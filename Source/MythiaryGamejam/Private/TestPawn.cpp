@@ -3,7 +3,9 @@
 
 #include "TestPawn.h"
 
-#include "TestGrid.h"
+#include "GameData.h"
+//#include "TestGrid.h"
+#include "GameData.h"
 #include "Kismet/GameplayStatics.h"
 
 // Sets default values
@@ -26,73 +28,26 @@ void ATestPawn::BeginPlay()
 void ATestPawn::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-
 }
 
 // Called to bind functionality to input
 void ATestPawn::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 {
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
-	PlayerInputComponent->BindAction(TEXT("MoveForward"), IE_Pressed, this, &ATestPawn::MoveForward);
-	PlayerInputComponent->BindAction(TEXT("MoveBack"), IE_Pressed, this, &ATestPawn::MoveBack);
-	PlayerInputComponent->BindAction(TEXT("MoveRight"), IE_Pressed, this, &ATestPawn::MoveRight);
-	PlayerInputComponent->BindAction(TEXT("MoveLeft"), IE_Pressed, this, &ATestPawn::MoveLeft);
-	PlayerInputComponent->BindAction(TEXT("MoveUp"), IE_Pressed, this, &ATestPawn::MoveUp);
-	PlayerInputComponent->BindAction(TEXT("MoveDown"), IE_Pressed, this, &ATestPawn::MoveDown);
+	PlayerInputComponent->BindAction<FMoveInDirection>(TEXT("MoveBack"), IE_Pressed, this, &ATestPawn::MoveInDirection, Direction::BACK);
+	PlayerInputComponent->BindAction<FMoveInDirection>(TEXT("MoveForward"), IE_Pressed, this, &ATestPawn::MoveInDirection, Direction::FORWARD);
+	PlayerInputComponent->BindAction<FMoveInDirection>(TEXT("MoveLeft"), IE_Pressed, this, &ATestPawn::MoveInDirection, Direction::LEFT);
+	PlayerInputComponent->BindAction<FMoveInDirection>(TEXT("MoveRight"), IE_Pressed, this, &ATestPawn::MoveInDirection, Direction::RIGHT);
+	PlayerInputComponent->BindAction<FMoveInDirection>(TEXT("MoveDown"), IE_Pressed, this, &ATestPawn::MoveInDirection, Direction::DOWN);
+	PlayerInputComponent->BindAction<FMoveInDirection>(TEXT("MoveUp"), IE_Pressed, this, &ATestPawn::MoveInDirection, Direction::UP);
 }
 
-void ATestPawn::MoveForward()
+void ATestPawn::MoveInDirection(Direction MoveDirection)
 {
-	UE_LOG(LogTemp, Display, TEXT("FORWARD"));
 	if (Grid != nullptr)
 	{
-		Grid->AttemptMoveInDirection({1,0,0});
+		FVector* Val = Directions.Find(MoveDirection);
+		if (Val != nullptr) Grid->AttemptMoveInDirection(*Val);
 	}
 }
-
-void ATestPawn::MoveBack()
-{
-	UE_LOG(LogTemp, Display, TEXT("BACK"));
-	if (Grid != nullptr)
-	{
-		Grid->AttemptMoveInDirection({-1,0,0});
-	}
-}
-
-void ATestPawn::MoveRight()
-{
-	UE_LOG(LogTemp, Display, TEXT("RIGHT"));
-	if (Grid != nullptr)
-	{
-		Grid->AttemptMoveInDirection({0,1,0});
-	}
-}
-
-void ATestPawn::MoveLeft()
-{
-	UE_LOG(LogTemp, Display, TEXT("LEFT"));
-	if (Grid != nullptr)
-	{
-		Grid->AttemptMoveInDirection({0,-1,0});
-	}
-}
-
-void ATestPawn::MoveUp()
-{
-	UE_LOG(LogTemp, Display, TEXT("LEFT"));
-	if (Grid != nullptr)
-	{
-		Grid->AttemptMoveInDirection({0,0,1});
-	}
-}
-
-void ATestPawn::MoveDown()
-{
-	UE_LOG(LogTemp, Display, TEXT("LEFT"));
-	if (Grid != nullptr)
-	{
-		Grid->AttemptMoveInDirection({0,0,-1});
-	}
-}
-
 
