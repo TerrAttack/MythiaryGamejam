@@ -17,11 +17,21 @@ protected:
 	virtual void BeginPlay() override;
 	UFUNCTION()
 	void OnBeginOverlap(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
-public:	
-	virtual void Tick(float DeltaTime) override;
-	void Move();
 	UPROPERTY(EditAnywhere)
 	UStaticMeshComponent* BaseMesh;
 	UPROPERTY(EditAnywhere)
 	USphereComponent* HitBox;
+	UPROPERTY(EditAnywhere)
+	FVector NewLocation;
+public:
+	UPROPERTY(EditAnywhere)
+	TArray<AActor*> WayPoints;
+	virtual void Tick(float DeltaTime) override;
+	void Move(TArray<AActor*> WayPoints);
+	void Timer(TArray<AActor*>WayPoints);
+	void ReverseArray();
+	UPROPERTY(EditAnywhere)
+	TSubclassOf<AActor> WayPointClass;
+private:
+	FTimerHandle TimerHandle;
 };
