@@ -1,6 +1,9 @@
 
 #include "PEnemy.h"
 
+#include "GameModeInfoCustomizer.h"
+#include "PActionTest.h"
+#include "PGameModeBase.h"
 #include "Kismet/GameplayStatics.h"
 
 APEnemy::APEnemy()
@@ -18,22 +21,42 @@ void APEnemy::BeginPlay()
 	Timer(WayPoints);
 }
 
+void APEnemy::PostInitializeComponents()
+{
+	Super::PostInitializeComponents();
+	if(APGameModeBase* GameMode = GetWorld()->GetAuthGameMode<APGameModeBase>())
+	{
+		GameMode->OnOtherActorsAction.AddDynamic(this, &APEnemy::OtherAction);
+	}
+}
+
 void APEnemy::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-	UE_LOG(LogTemp,Warning,TEXT("Array length: %i"),WayPoints.Num());
+	//UE_LOG(LogTemp,Warning,TEXT("Array length: %i"),WayPoints.Num());
+}
+
+void APEnemy::OtherAction()
+{
+	if(!bMoveBack && Index > WayPoints.Num()-2) bMoveBack = true;
+	if(bMoveBack && Index <= 1) bMoveBack = false;
+	if(bMoveBack) Index--;
+	if(!bMoveBack) Index++;
+	TeleportTo(WayPoints[Index]->GetActorLocation(),WayPoints[Index]->GetActorRotation(),false,false );
+	UE_LOG(LogTemp,Warning,TEXT("%i"),Index)
+	Timer(WayPoints);
 }
 
 void APEnemy::Timer(const TArray<AActor*> WayPointArray)
 {
-	const FTimerDelegate MoveDelegate = FTimerDelegate::CreateUObject(this,&APEnemy::Move, WayPointArray);
-	GetWorldTimerManager().SetTimer(TimerHandle, MoveDelegate,2, false);
+	//const FTimerDelegate MoveDelegate = FTimerDelegate::CreateUObject(this,&APEnemy::Move, WayPointArray);
+	GetWorldTimerManager().SetTimer(TimerHandle,this, &APEnemy::OtherAction,2, false);
 }
 
 void APEnemy::ReverseArray()
 {
 	UGameplayStatics::GetAllActorsOfClass(GetWorld(),WayPointClass,WayPoints);
-	int n = 3;
+	int n = WayPoints.Num();
 	AActor* Temp;
 	for (int i = 0; i < n / 2; i++)
 	{
@@ -44,6 +67,7 @@ void APEnemy::ReverseArray()
 	Timer(WayPoints);
 	
 }
+
 
 void APEnemy::Move(TArray<AActor*>WayPointArray)
 {
