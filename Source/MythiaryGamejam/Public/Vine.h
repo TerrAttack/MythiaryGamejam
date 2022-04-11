@@ -52,4 +52,7 @@ public:
 	TArray<AActor*> VineParts;
 	AActor* LastSegment = nullptr;
 	Direction LastDirection = Direction::FORWARD;
+
+	//FVector LastLocation;
+	FVector CurrentLocation = {50.f,50.f,50.f};
 };

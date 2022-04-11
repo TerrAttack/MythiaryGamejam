@@ -18,14 +18,23 @@ AVine::AVine()
 void AVine::BeginPlay()
 {
 	Super::BeginPlay();
-	
+    
+    ///Set camera to orthographic
+    /*
+	auto Cam = GetWorld()->GetFirstPlayerController()->PlayerCameraManager;
+	if (Cam != nullptr)
+	{
+		Cam->bIsOrthographic = true;
+		Cam->UnlockOrthoWidth();
+		Cam->SetOrthoWidth(.01f);
+	}
+	*/
 }
 
 // Called every frame
 void AVine::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-
 }
 
 // Called to bind functionality to input
@@ -74,7 +83,11 @@ void AVine::AddSegment(Direction MoveDirection)
 	{
 		UClass* SpawnClass;
 		FRotator Orientation = FRotator::ZeroRotator;
-		
+
+		SpawnClass = MoveDirection == LastDirection ? VineSegmentStraightClass : VineSegmentCurveClass;
+		Orientation = MoveDirection == LastDirection ? GetStraightVineRotation(MoveDirection) : GetCurvedVineRotation(MoveDirection);
+
+		/*
 		if (MoveDirection == LastDirection)
 		{
 			SpawnClass = VineSegmentStraightClass;
@@ -85,8 +98,8 @@ void AVine::AddSegment(Direction MoveDirection)
 			SpawnClass = VineSegmentCurveClass;
 			Orientation = GetCurvedVineRotation(MoveDirection);
 		}
-		
-		AActor* VineSegment = GetWorld()->SpawnActor<AActor>(SpawnClass, GetActorLocation(), Orientation);
+		*/
+		AActor* VineSegment = GetWorld()->SpawnActor<AActor>(SpawnClass, CurrentLocation, Orientation);
 		LastSegment = VineSegment;
 		LastDirection = MoveDirection;
 		VineParts.Add(VineSegment);
@@ -207,7 +220,8 @@ bool AVine::CanMoveInDirection(Direction MoveDirection)
 	FCollisionQueryParams CollisionQueryParams;
 	CollisionQueryParams.AddIgnoredActor(this);
 	
-	GetWorld()->LineTraceSingleByChannel(Hit, GetActorLocation(), GetActorLocation() + GridUnitLength * *MoveVector, ECollisionChannel::ECC_WorldStatic, CollisionQueryParams);
+	GetWorld()->LineTraceSingleByChannel(Hit, CurrentLocation, CurrentLocation + GridUnitLength * *MoveVector, ECollisionChannel::ECC_WorldStatic, CollisionQueryParams);
+	//GetWorld()->LineTraceSingleByChannel(Hit, GetActorLocation(), GetActorLocation() + GridUnitLength * *MoveVector, ECollisionChannel::ECC_WorldStatic, CollisionQueryParams);
 	return Hit.GetActor() == nullptr;
 }
 
@@ -219,6 +233,7 @@ void AVine::MoveInDirection(Direction MoveDirection)
 		return;
 	}
 	FVector TransformVector = GridUnitLength * *MoveVector;
-	SetActorLocation(GetActorLocation() + TransformVector);
+	//SetActorLocation(GetActorLocation() + TransformVector);
+	CurrentLocation += TransformVector;
 }
 

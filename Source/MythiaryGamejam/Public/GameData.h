@@ -9,6 +9,7 @@
  */
 
 enum class Direction : uint8 {
+	INVALID = 7		UMETA(DisplayName = "INVALID"),
 	BACK = 0		UMETA(DisplayName = "BACK"),
 	FORWARD = 1		UMETA(DisplayName = "FORWARD"),
 	LEFT = 2		UMETA(DisplayName = "LEFT"),
