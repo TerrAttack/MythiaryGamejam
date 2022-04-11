@@ -1,7 +1,7 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 
-#include "Vine.h"
+#include "PVine.h"
 
 #include "PActionTest.h"
 #include "PGameModeBase.h"
@@ -10,7 +10,7 @@
 #include "Kismet/GameplayStatics.h"
 
 // Sets default values
-AVine::AVine()
+APVine::APVine()
 {
  	// Set this pawn to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
@@ -19,39 +19,39 @@ AVine::AVine()
 }
 
 // Called when the game starts or when spawned
-void AVine::BeginPlay()
+void APVine::BeginPlay()
 {
 	Super::BeginPlay();
 }
 
 // Called every frame
-void AVine::Tick(float DeltaTime)
+void APVine::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 }
 
-void AVine::PostInitializeComponents()
+void APVine::PostInitializeComponents()
 {
 	Super::PostInitializeComponents();
 	ActionSystem = GetWorld()->GetAuthGameMode<APGameModeBase>();
 	if (ActionSystem == nullptr) return;
-	ActionSystem->OnPlayerAction.AddDynamic(this, &AVine::PlayerTurn);
-	ActionSystem->OnOtherActorsAction.AddDynamic(this, &AVine::OtherTurn);
+	ActionSystem->OnPlayerAction.AddDynamic(this, &APVine::PlayerTurn);
+	ActionSystem->OnOtherActorsAction.AddDynamic(this, &APVine::OtherTurn);
 	ActionSystem->PlayerDelay = .1f;
 	ActionSystem->OtherActorsDelay = .1f;
 }
 
 // Called to bind functionality to input
-void AVine::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
+void APVine::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 {
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
-	PlayerInputComponent->BindAction<FMoveInDirection>(TEXT("MoveBack"), IE_Pressed, this, &AVine::AttemptMoveInDirection, Direction::BACK);
-	PlayerInputComponent->BindAction<FMoveInDirection>(TEXT("MoveForward"), IE_Pressed, this, &AVine::AttemptMoveInDirection, Direction::FORWARD);
-	PlayerInputComponent->BindAction<FMoveInDirection>(TEXT("MoveLeft"), IE_Pressed, this, &AVine::AttemptMoveInDirection, Direction::LEFT);
-	PlayerInputComponent->BindAction<FMoveInDirection>(TEXT("MoveRight"), IE_Pressed, this, &AVine::AttemptMoveInDirection, Direction::RIGHT);
+	PlayerInputComponent->BindAction<FMoveInDirection>(TEXT("MoveBack"), IE_Pressed, this, &APVine::AttemptMoveInDirection, Direction::BACK);
+	PlayerInputComponent->BindAction<FMoveInDirection>(TEXT("MoveForward"), IE_Pressed, this, &APVine::AttemptMoveInDirection, Direction::FORWARD);
+	PlayerInputComponent->BindAction<FMoveInDirection>(TEXT("MoveLeft"), IE_Pressed, this, &APVine::AttemptMoveInDirection, Direction::LEFT);
+	PlayerInputComponent->BindAction<FMoveInDirection>(TEXT("MoveRight"), IE_Pressed, this, &APVine::AttemptMoveInDirection, Direction::RIGHT);
 }
 
-void AVine::AttemptMoveInDirection(Direction MoveDirection)
+void APVine::AttemptMoveInDirection(Direction MoveDirection)
 {
 	if (ActionSystem == nullptr || !bPlayerHasAction) return;
 
@@ -83,7 +83,7 @@ void AVine::AttemptMoveInDirection(Direction MoveDirection)
 	}
 }
 
-void AVine::AddSegment(Direction MoveDirection)
+void APVine::AddSegment(Direction MoveDirection)
 {
 	if (VineSegmentStraightClass != nullptr && VineSegmentCurveClass != nullptr)
 	{
@@ -96,7 +96,7 @@ void AVine::AddSegment(Direction MoveDirection)
 	}
 }
 
-FRotator AVine::GetStraightVineRotation(Direction MoveDirection)
+FRotator APVine::GetStraightVineRotation(Direction MoveDirection)
 {
 	FRotator Orientation = FRotator::ZeroRotator;
 	
@@ -112,7 +112,7 @@ FRotator AVine::GetStraightVineRotation(Direction MoveDirection)
 	return Orientation;
 }
 
-FRotator AVine::GetCurvedVineRotation(Direction MoveDirection)
+FRotator APVine::GetCurvedVineRotation(Direction MoveDirection)
 {
 	FRotator Orientation = FRotator::ZeroRotator;
 
@@ -212,20 +212,20 @@ FRotator AVine::GetCurvedVineRotation(Direction MoveDirection)
 	return Orientation;
 }
 
-void AVine::PlayerTurn()
+void APVine::PlayerTurn()
 {
 	bPlayerHasAction = true;
 	UE_LOG(LogTemp, Display, TEXT("Player gets turn"));
 }
 
-void AVine::OtherTurn()
+void APVine::OtherTurn()
 {
 	bPlayerHasAction = false;
 	UE_LOG(LogTemp, Display, TEXT("Other gets turn"));
 }
 
 
-bool AVine::CanMoveInDirection(Direction MoveDirection)
+bool APVine::CanMoveInDirection(Direction MoveDirection)
 {
 	FHitResult Hit;
 	FVector* MoveVector = Directions.Find(MoveDirection);
@@ -245,7 +245,7 @@ bool AVine::CanMoveInDirection(Direction MoveDirection)
 	return Hit.GetActor() == nullptr;
 }
 
-void AVine::MoveInDirection(Direction MoveDirection)
+void APVine::MoveInDirection(Direction MoveDirection)
 {
 	AddSegment(MoveDirection);
 	const FVector* MoveVector = Directions.Find(MoveDirection);

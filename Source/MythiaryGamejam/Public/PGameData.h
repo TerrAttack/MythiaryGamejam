@@ -19,17 +19,6 @@ enum class Direction : uint8
 	UP = 5			UMETA(DisplayName = "UP")
 };
 
-// Only because I dont know how to get the index from the direction
-/*
-static TMap<Direction, uint8> DirectionInts
-{
-	{Direction::FORWARD, 0},
-	{Direction::RIGHT, 1},
-	{Direction::BACK, 2},
-	{Direction::LEFT, 3},
-};
-*/
-
 static TMap<Direction, FVector> Directions
 {
 	{Direction::FORWARD, {1,0, 0}},
@@ -40,9 +29,9 @@ static TMap<Direction, FVector> Directions
 	{Direction::UP, {0,0, 1}},
 };
 
-class MYTHIARYGAMEJAM_API GameData
+class MYTHIARYGAMEJAM_API PGameData
 {
 public:
-	GameData();
-	~GameData();
+	PGameData();
+	~PGameData();
 };

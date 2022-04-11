@@ -1,12 +1,12 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 
-#include "MythiaryGamejam/Public/Test.h"
+#include "PGameData.h"
 
-Test::Test()
+PGameData::PGameData()
 {
 }
 
-Test::~Test()
+PGameData::~PGameData()
 {
 }

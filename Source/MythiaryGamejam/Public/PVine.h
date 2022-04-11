@@ -3,18 +3,18 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "GameData.h"
+#include "PGameData.h"
 #include "GameFramework/Pawn.h"
-#include "Vine.generated.h"
+#include "PVine.generated.h"
 
 UCLASS()
-class MYTHIARYGAMEJAM_API AVine : public APawn
+class MYTHIARYGAMEJAM_API APVine : public APawn
 {
 	GENERATED_BODY()
 
 public:
 	// Sets default values for this pawn's properties
-	AVine();
+	APVine();
 
 protected:
 	// Called when the game starts or when spawned
