@@ -28,13 +28,10 @@ public:
 	UPROPERTY(EditAnywhere)
 	TArray<AActor*> WayPoints;
 	virtual void Tick(float DeltaTime) override;
-	void Move(TArray<AActor*> WayPoints);
-	void Timer();
-	void ReverseArray();
-	void OtherAction();
+	void Move();
 	bool bMoveBack;
 	int32 Index;
-
+	void Timer();
 	UPROPERTY(EditAnywhere)
 	TSubclassOf<AActor> WayPointClass;
 private:
