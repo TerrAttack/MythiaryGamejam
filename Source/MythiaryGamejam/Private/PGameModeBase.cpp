@@ -7,8 +7,6 @@ void APGameModeBase::StartPlay()
 	Super::StartPlay();
 	OnPlayerAction.Broadcast();
 	CurrentLevel = 0;
-	FTimerHandle LoadNextLevelDelay_TimerHandle;
-	GetWorldTimerManager().SetTimer(LoadNextLevelDelay_TimerHandle, this, &APGameModeBase::NextLevel, 5.0f, true);
 }
 
 void APGameModeBase::PlayerUsedAction()
@@ -30,7 +28,7 @@ void APGameModeBase::BroadcastOtherActorsAction()
 	GetWorldTimerManager().SetTimer(PlayerActionBroadcastDelay_TimerHandle, this, &APGameModeBase::BroadcastPlayerAction, PlayerDelay);
 }
 
-void APGameModeBase::LoadLevel(const FName LevelName, int32 LevelIndex) const
+void APGameModeBase::LoadLevel(const FName LevelName) const
 {
 	UGameplayStatics::OpenLevel(GetWorld(), LevelName, false);
 }

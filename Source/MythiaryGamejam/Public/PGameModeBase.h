@@ -29,7 +29,7 @@ public:
 	UPROPERTY(EditAnywhere)
 	float PlayerDelay = 3.0f;
 
-	void LoadLevel(const FName LevelName, int32 LevelIndex = 0) const;
+	void LoadLevel(const FName LevelName) const;
 	void ReloadCurrentLevel() const;
 	void NextLevel();
 
