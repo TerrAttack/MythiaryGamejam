@@ -37,8 +37,6 @@ void APVine::PostInitializeComponents()
 	if (ActionSystem == nullptr) return;
 	ActionSystem->OnPlayerAction.AddDynamic(this, &APVine::PlayerTurn);
 	ActionSystem->OnOtherActorsAction.AddDynamic(this, &APVine::OtherTurn);
-	ActionSystem->PlayerDelay = .1f;
-	ActionSystem->OtherActorsDelay = .1f;
 }
 
 // Called to bind functionality to input
