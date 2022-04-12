@@ -28,4 +28,15 @@ public:
 	float OtherActorsDelay = 1.0f;
 	UPROPERTY(EditAnywhere)
 	float PlayerDelay = 3.0f;
+
+	void LoadLevel(const FName LevelName) const;
+	void ReloadCurrentLevel() const;
+	void NextLevel();
+
+	int32 CheckCurrentLevelIndex();
+
+	int32 CurrentLevel;
+	
+	UPROPERTY(EditAnywhere)
+	TArray<FName> LevelNames;
 };
