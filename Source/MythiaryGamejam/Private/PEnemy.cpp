@@ -4,6 +4,7 @@
 #include "GameModeInfoCustomizer.h"
 #include "PActionTest.h"
 #include "PGameModeBase.h"
+#include "Vine.h"
 #include "Kismet/GameplayStatics.h"
 
 APEnemy::APEnemy()
@@ -19,6 +20,7 @@ void APEnemy::BeginPlay()
 {
 	Super::BeginPlay();
 	Timer();
+	HitBox->OnComponentBeginOverlap.AddDynamic(this, &APEnemy::OnBeginOverlap);
 }
 
 void APEnemy::PostInitializeComponents()
@@ -30,13 +32,19 @@ void APEnemy::PostInitializeComponents()
 	}
 }
 
+void APEnemy::Tick(float DeltaTime)
+{
+	Super::Tick(DeltaTime);
+}
+
 void APEnemy::Move()
 {
 	if(!bMoveBack && Index > WayPoints.Num()-2) bMoveBack = true;
 	if(bMoveBack && Index <= 1) bMoveBack = false;
 	if(bMoveBack) Index--;
 	if(!bMoveBack) Index++;
-	TeleportTo(WayPoints[Index]->GetActorLocation(),WayPoints[Index]->GetActorRotation(),false,false );
+	SetActorLocationAndRotation(WayPoints[Index]->GetActorLocation(),WayPoints[Index]->GetActorRotation());
+	//TeleportTo(WayPoints[Index]->GetActorLocation(),WayPoints[Index]->GetActorRotation(),false,false );
 	Timer();
 }
 
@@ -48,7 +56,11 @@ void APEnemy::Timer()
 void APEnemy::OnBeginOverlap(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp,
                              int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
 {
-	UE_LOG(LogTemp,Warning, TEXT("yes"));
+	UE_LOG(LogTemp,Warning,TEXT("yes"));
+	if(Cast<AVine>(OtherActor))
+	{
+		OtherActor->Destroy();
+	}
 }
 
 
