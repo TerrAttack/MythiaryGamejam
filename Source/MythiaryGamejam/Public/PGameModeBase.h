@@ -29,8 +29,11 @@ public:
 	UPROPERTY(EditAnywhere)
 	float PlayerDelay = 3.0f;
 
+	UFUNCTION(BlueprintCallable)
 	void LoadLevel(const FName LevelName) const;
+	UFUNCTION(BlueprintCallable)
 	void ReloadCurrentLevel() const;
+	UFUNCTION(BlueprintCallable)
 	void NextLevel();
 
 	int32 CheckCurrentLevelIndex();

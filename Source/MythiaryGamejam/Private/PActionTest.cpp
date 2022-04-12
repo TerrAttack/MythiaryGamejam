@@ -27,7 +27,7 @@ void APActionTest::Tick(float DeltaSeconds)
 	{
 		bPlayerHasAction = false;
 		FTimerHandle PlayerDoesActionDelay_TimerHandle;
-		GetWorldTimerManager().SetTimer(PlayerDoesActionDelay_TimerHandle, this, &APActionTest::PlayerDoesAction, 1.0f);
+		//GetWorldTimerManager().SetTimer(PlayerDoesActionDelay_TimerHandle, this, &APActionTest::PlayerDoesAction, 1.0f);
 	}
 }
 
