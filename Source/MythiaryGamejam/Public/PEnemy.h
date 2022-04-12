@@ -29,7 +29,7 @@ public:
 	TArray<AActor*> WayPoints;
 	virtual void Tick(float DeltaTime) override;
 	void Move(TArray<AActor*> WayPoints);
-	void Timer(TArray<AActor*>WayPoints);
+	void Timer();
 	void ReverseArray();
 	void OtherAction();
 	bool bMoveBack;

@@ -18,7 +18,7 @@ APEnemy::APEnemy()
 void APEnemy::BeginPlay()
 {
 	Super::BeginPlay();
-	Timer(WayPoints);
+	Timer();
 }
 
 void APEnemy::PostInitializeComponents()
@@ -33,7 +33,6 @@ void APEnemy::PostInitializeComponents()
 void APEnemy::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-	//UE_LOG(LogTemp,Warning,TEXT("Array length: %i"),WayPoints.Num());
 }
 
 void APEnemy::OtherAction()
@@ -43,13 +42,11 @@ void APEnemy::OtherAction()
 	if(bMoveBack) Index--;
 	if(!bMoveBack) Index++;
 	TeleportTo(WayPoints[Index]->GetActorLocation(),WayPoints[Index]->GetActorRotation(),false,false );
-	UE_LOG(LogTemp,Warning,TEXT("%i"),Index)
-	Timer(WayPoints);
+	Timer();
 }
 
-void APEnemy::Timer(const TArray<AActor*> WayPointArray)
+void APEnemy::Timer()
 {
-	//const FTimerDelegate MoveDelegate = FTimerDelegate::CreateUObject(this,&APEnemy::Move, WayPointArray);
 	GetWorldTimerManager().SetTimer(TimerHandle,this, &APEnemy::OtherAction,2, false);
 }
 
@@ -64,8 +61,7 @@ void APEnemy::ReverseArray()
 		WayPoints[i] = WayPoints[n - i -1];
 		WayPoints[n-i-1] = Temp;
 	}
-	Timer(WayPoints);
-	
+	Timer();
 }
 
 
@@ -77,7 +73,7 @@ void APEnemy::Move(TArray<AActor*>WayPointArray)
 		TeleportTo(WayPoint->GetActorLocation(),WayPoint->GetActorRotation(),false,false);
 	}
 	WayPoints.Pop();
-	if(WayPoints.Num() > 0)  Timer(WayPoints);
+	if(WayPoints.Num() > 0)  Timer();
 		else ReverseArray();
 }
 
