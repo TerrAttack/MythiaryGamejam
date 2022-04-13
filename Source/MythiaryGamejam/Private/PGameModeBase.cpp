@@ -56,7 +56,7 @@ int32 APGameModeBase::CheckCurrentLevelIndex()
 			return i;
 		}
 	}
-	UE_LOG(LogTemp, Error, TEXT("Couldn't Find Level Index"));
+	UE_LOG(LogTemp, Error, TEXT("Current level not indexed in PGameModeBase"));
 	return 0;
 }
 

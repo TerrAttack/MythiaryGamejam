@@ -4,8 +4,11 @@
 
 #include "CoreMinimal.h"
 #include "PGameData.h"
+#include "Camera/CameraComponent.h"
 #include "GameFramework/Pawn.h"
 #include "PVine.generated.h"
+
+class APVineSegment;
 
 UCLASS()
 class MYTHIARYGAMEJAM_API APVine : public APawn
@@ -42,6 +45,10 @@ public:
 	UPROPERTY(EditAnywhere)
 	float GridUnitLength = 100.f;
 
+    /* Blueprint for ghost vine segments */
+	UPROPERTY(EditAnywhere)
+	TSubclassOf<AActor> VineSegmentGhostClass;
+
 	/* Blueprint for straight vine segments */
 	UPROPERTY(EditAnywhere)
 	TSubclassOf<AActor> VineSegmentStraightClass;
@@ -58,7 +65,8 @@ public:
 	UPROPERTY()
 	AActor* LastSegment = nullptr;
 	
-	Direction LastDirection = Direction::INVALID;
+	Direction LastDirection = Direction::UP;
+	UPROPERTY(EditAnywhere)
 	FVector CurrentLocation = {50.f,50.f,50.f};
 
 	UPROPERTY()
@@ -69,4 +77,25 @@ public:
 	void PlayerTurn();
 	UFUNCTION()
 	void OtherTurn();
+
+	UPROPERTY()
+	APVineSegment* VineHead;
+
+	UPROPERTY(EditAnywhere)
+	bool bDrawDirectionArrows = true;
+
+	UPROPERTY(EditAnywhere)
+	int32 MaxActions = 5;
+
+	UPROPERTY()
+	int32 ActionsLeft;
+
+	UFUNCTION()
+	void MoveVine(bool bToEnd);
+	
+	UFUNCTION()
+	void OnHurt();
+	
+	UFUNCTION()
+	void PlantVine();
 };
