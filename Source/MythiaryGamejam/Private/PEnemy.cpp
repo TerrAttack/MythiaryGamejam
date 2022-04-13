@@ -39,6 +39,7 @@ void APEnemy::Tick(float DeltaTime)
 
 void APEnemy::Move()
 {
+	UGameplayStatics::PlaySoundAtLocation(this,JumpSound,GetActorLocation(),GetActorRotation());
 	if(!bMoveBack && Index > WayPoints.Num()-2) bMoveBack = true;
 	if(bMoveBack && Index <= 1) bMoveBack = false;
 	if(bMoveBack) Index--;
