@@ -88,3 +88,7 @@ DerivedDataCache
 
 DefaultEditor.ini
 DefaultEditorPerProjectUserSettings.ini
+
+# Binary Files
+Binaries/*
+Plugins/*/Binaries/*
