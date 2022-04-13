@@ -102,4 +102,7 @@ public:
 
 	UFUNCTION()
 	void MoveSprite();
+
+	UPROPERTY(EditAnywhere)
+	AActor* DirtTile = nullptr;
 };

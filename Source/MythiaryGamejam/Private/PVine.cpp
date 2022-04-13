@@ -231,8 +231,15 @@ void APVine::OnHurt()
 
 void APVine::PlantVine()
 {
-	UE_LOG(LogTemp, Display, TEXT("TELEPORT! NYOOOOOOOM!"));
-	MoveVine(true);
+	if (DirtTile != nullptr)
+	{
+		if (FVector::Dist(CurrentLocation, DirtTile->GetActorLocation()) <= GridUnitLength)
+		{
+			SetActorLocation(CurrentLocation);
+			MoveVine(true);
+			DirtTile = nullptr;
+		}
+	}
 }
 
 void APVine::MoveSprite()
