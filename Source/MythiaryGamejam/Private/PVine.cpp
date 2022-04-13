@@ -24,7 +24,6 @@ void APVine::BeginPlay()
 	Super::BeginPlay();
 	ActionsLeft = MaxActions;
 	if (VineSegmentGhostClass == nullptr) return;
-	VineHead = GetWorld()->SpawnActor<APVineSegment>(VineSegmentGhostClass, CurrentLocation, FRotator::ZeroRotator);
 }
 
 // Called every frame
@@ -104,7 +103,7 @@ void APVine::AddSegment(Direction MoveDirection)
 	{
 		const FRotator Orientation = MoveDirection == LastDirection ? GetStraightVineRotation(MoveDirection) : GetCurvedVineRotation(MoveDirection);
 		UClass* SpawnClass = MoveDirection == LastDirection ? VineSegmentStraightClass : VineSegmentCurveClass;
-		APVineSegment* VineSegment = GetWorld()->SpawnActor<APVineSegment>(SpawnClass, CurrentLocation, Orientation);
+		APVineSegment* VineSegment = GetWorld()->SpawnActor<APVineSegment>(SpawnClass, GetActorLocation(), Orientation);
 		if (VineSegment != nullptr) VineSegment->Vine = this;
 		LastSegment = VineSegment;
 		LastDirection = MoveDirection;
@@ -210,7 +209,7 @@ void APVine::OtherTurn()
 void APVine::MoveVine(bool bToEnd)
 {
 	if (VineParts.IsEmpty()) return;
-	if (!bToEnd) CurrentLocation = VineParts[0]->GetActorLocation();
+	if (!bToEnd) SetActorLocation(VineParts[0]->GetActorLocation());
 	for (int32 i = VineParts.Num() - 1; i >= 0; i--)
 	{
 		AActor* Segment = VineParts[i];
@@ -218,7 +217,6 @@ void APVine::MoveVine(bool bToEnd)
 		Segment->Destroy();
 	}
 	
-	VineHead->SetActorLocation(CurrentLocation);
 	LastDirection = Direction::UP;
 	ActionsLeft = MaxActions;
 }
@@ -250,8 +248,8 @@ bool APVine::CanMoveInDirection(Direction MoveDirection)
 	if (VineHead != nullptr) CollisionQueryParams.AddIgnoredActor(VineHead);
 	
 	GetWorld()->LineTraceSingleByChannel(Hit,
-		CurrentLocation,
-		CurrentLocation + GridUnitLength * *MoveVector,
+		GetActorLocation(),
+		GetActorLocation() + GridUnitLength * *MoveVector,
 		ECollisionChannel::ECC_WorldStatic, CollisionQueryParams);
 	
 	return Hit.GetActor() == nullptr;
@@ -264,10 +262,10 @@ void APVine::MoveInDirection(Direction MoveDirection)
 	const FVector* MoveVector = Directions.Find(MoveDirection);
 	if (MoveVector == nullptr) return;
 	const FVector TransformVector = GridUnitLength * *MoveVector;
-	CurrentLocation += TransformVector;
+	SetActorLocation(GetActorLocation() + TransformVector);
 	bPlayerHasAction = false;
 	if (VineHead == nullptr) return;
-	VineHead->SetActorLocation(CurrentLocation);
+	VineHead->SetActorLocation(GetActorLocation());
 	if (MoveDirection == Direction::FORWARD || MoveDirection == Direction::BACK)
 	{
 		VineHead->SetActorRotation({0,0,0});
