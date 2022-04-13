@@ -25,6 +25,7 @@ public:
 	UPROPERTY(EditAnywhere)
 	TArray<AActor*> WayPoints;
 	virtual void Tick(float DeltaTime) override;
+	UFUNCTION()
 	void Move();
 	bool bMoveBack;
 	int32 Index;
