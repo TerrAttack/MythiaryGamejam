@@ -28,7 +28,7 @@ public:
 	UPROPERTY(EditAnywhere)
 	APVine* Vine = nullptr;
 
-	UFUNCTION()
+	UFUNCTION(BlueprintCallable)
 	void OnHurt();
 	
 	UFUNCTION(BlueprintCallable)
