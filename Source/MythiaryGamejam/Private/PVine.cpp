@@ -237,7 +237,7 @@ void APVine::PlantVine()
 {
 	if (DirtTile != nullptr)
 	{
-		if (FVector::Dist(CurrentLocation, DirtTile->GetActorLocation()) <= GridUnitLength)
+		if (FVector::Dist(CurrentLocation, DirtTile->GetActorLocation()) <= GridUnitLength * 0.8f)
 		{
 			SetActorLocation(CurrentLocation);
 			MoveVine(true);
