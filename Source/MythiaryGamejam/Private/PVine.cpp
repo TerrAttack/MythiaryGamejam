@@ -2,9 +2,9 @@
 
 
 #include "PVine.h"
-
 #include "PActionTest.h"
 #include "PGameModeBase.h"
+#include "PVineSegment.h"
 #include "Engine/World.h"
 #include "UObject/Class.h"
 #include "Kismet/GameplayStatics.h"
@@ -22,6 +22,9 @@ APVine::APVine()
 void APVine::BeginPlay()
 {
 	Super::BeginPlay();
+	ActionsLeft = MaxActions;
+	if (VineSegmentStraightClass == nullptr) return;
+	VineHead = GetWorld()->SpawnActor<APVineSegment>(VineSegmentStraightClass, CurrentLocation, FRotator::ZeroRotator);
 }
 
 // Called every frame
@@ -47,11 +50,24 @@ void APVine::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 	PlayerInputComponent->BindAction<FMoveInDirection>(TEXT("MoveForward"), IE_Pressed, this, &APVine::AttemptMoveInDirection, Direction::FORWARD);
 	PlayerInputComponent->BindAction<FMoveInDirection>(TEXT("MoveLeft"), IE_Pressed, this, &APVine::AttemptMoveInDirection, Direction::LEFT);
 	PlayerInputComponent->BindAction<FMoveInDirection>(TEXT("MoveRight"), IE_Pressed, this, &APVine::AttemptMoveInDirection, Direction::RIGHT);
+	PlayerInputComponent->BindAction(TEXT("TestFunc"), IE_Pressed, this, &APVine::OnHurt);
 }
 
 void APVine::AttemptMoveInDirection(Direction MoveDirection)
 {
-	if (ActionSystem == nullptr || !bPlayerHasAction) return;
+	if (!bPlayerHasAction)
+	{
+		UE_LOG(LogTemp, Display, TEXT("CANT MOVE! ITS NOT THE PLAYERS TURN!"));
+		return;
+	}
+	
+	if (ActionsLeft <= 0)
+	{
+		UE_LOG(LogTemp, Display, TEXT("CANT MOVE! NO MORE ACTIONS LEFT!"));
+		return;
+	}
+	
+	if (ActionSystem == nullptr) return;
 
 	// move down if going over an edge
 	if (CanMoveInDirection(Direction::DOWN))
@@ -76,7 +92,7 @@ void APVine::AttemptMoveInDirection(Direction MoveDirection)
 		}
 		else
 		{
-			UE_LOG(LogTemp, Display, TEXT("CANNOTMOVE"));
+			UE_LOG(LogTemp, Display, TEXT("CANT MOVE! PATH IS OBSTRUCTED!"));
 		}
 	}
 }
@@ -110,6 +126,7 @@ FRotator APVine::GetStraightVineRotation(Direction MoveDirection)
 	return Orientation;
 }
 
+/* Yandere Dev would be proud */
 FRotator APVine::GetCurvedVineRotation(Direction MoveDirection)
 {
 	FRotator Orientation = FRotator::ZeroRotator;
@@ -173,15 +190,6 @@ FRotator APVine::GetCurvedVineRotation(Direction MoveDirection)
 	}
 
 	//////////////////////
-
-	//WIP
-	/*
-	else if (LastDirection == Direction::UP)
-	{
-		if (MoveDirection == Direction::RIGHT) Orientation = {-90,0,0};
-		else if (MoveDirection == Direction::BACK) Orientation = {-90,90,0};
-		else if (MoveDirection == Direction::)
-	}*/
 	
 	else if (LastDirection == Direction::UP && MoveDirection == Direction::RIGHT ||
 	LastDirection == Direction::LEFT && MoveDirection == Direction::DOWN)
@@ -222,6 +230,28 @@ void APVine::OtherTurn()
 	UE_LOG(LogTemp, Display, TEXT("Other gets turn"));
 }
 
+void APVine::OnHurt()
+{
+	UE_LOG(LogTemp, Display, TEXT("OOOOH NOOOOOOOO! VINE IS DED!"));
+	if (VineParts.IsEmpty()) return;
+	for (int32 i = VineParts.Num() - 1; i >= 0; i--)
+	{
+		AActor* Segment = VineParts[i];
+
+		if (i == 0)
+		{
+			CurrentLocation = Segment->GetActorLocation();
+			VineHead->SetActorLocation(CurrentLocation);
+			LastDirection = Direction::INVALID;
+			ActionsLeft = MaxActions;
+			
+		}
+
+		VineParts.Remove(Segment);
+		Segment->Destroy();
+	}
+}
+
 
 bool APVine::CanMoveInDirection(Direction MoveDirection)
 {
@@ -234,6 +264,7 @@ bool APVine::CanMoveInDirection(Direction MoveDirection)
 
 	FCollisionQueryParams CollisionQueryParams;
 	CollisionQueryParams.AddIgnoredActor(this);
+	if (VineHead != nullptr) CollisionQueryParams.AddIgnoredActor(VineHead);
 	
 	GetWorld()->LineTraceSingleByChannel(Hit,
 		CurrentLocation,
@@ -245,11 +276,27 @@ bool APVine::CanMoveInDirection(Direction MoveDirection)
 
 void APVine::MoveInDirection(Direction MoveDirection)
 {
+	if (LastDirection == Direction::INVALID) LastDirection = MoveDirection;
 	AddSegment(MoveDirection);
 	const FVector* MoveVector = Directions.Find(MoveDirection);
 	if (MoveVector == nullptr) return;
 	const FVector TransformVector = GridUnitLength * *MoveVector;
 	CurrentLocation += TransformVector;
 	bPlayerHasAction = false;
+	if (VineHead == nullptr) return;
+	VineHead->SetActorLocation(CurrentLocation);
+	if (MoveDirection == Direction::FORWARD || MoveDirection == Direction::BACK)
+	{
+		VineHead->SetActorRotation({0,0,0});
+	}
+	else if (MoveDirection == Direction::LEFT || MoveDirection == Direction::RIGHT)
+	{
+		VineHead->SetActorRotation({0,90,0});
+	}
+	else if (MoveDirection == Direction::UP || MoveDirection == Direction::DOWN)
+	{
+		VineHead->SetActorRotation({90,0,0});
+	}
+	ActionsLeft--;
 }
 

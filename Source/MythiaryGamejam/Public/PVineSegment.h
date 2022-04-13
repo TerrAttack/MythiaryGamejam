@@ -4,16 +4,18 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
-#include "TestCell.generated.h"
+#include "PVineSegment.generated.h"
+
+class APVine;
 
 UCLASS()
-class MYTHIARYGAMEJAM_API ATestCell : public AActor
+class MYTHIARYGAMEJAM_API APVineSegment : public AActor
 {
 	GENERATED_BODY()
 	
 public:	
 	// Sets default values for this actor's properties
-	ATestCell();
+	APVineSegment();
 
 protected:
 	// Called when the game starts or when spawned
@@ -23,4 +25,9 @@ public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
+	UPROPERTY()
+	APVine* Vine = nullptr;
+
+	UFUNCTION()
+	void OnHurt();
 };
