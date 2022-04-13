@@ -96,4 +96,13 @@ public:
 	
 	UFUNCTION()
 	void PlantVine();
+	
+	UPROPERTY()
+	FVector CurrentLocation = FVector::ZeroVector;
+
+	UFUNCTION()
+	void MoveSprite();
+
+	UPROPERTY(EditAnywhere)
+	AActor* DirtTile = nullptr;
 };

@@ -31,6 +31,8 @@ public:
 	int32 Index;
 	void Timer();
 	UPROPERTY(EditAnywhere)
+	USoundBase* JumpSound;
+	UPROPERTY(EditAnywhere)
 	TSubclassOf<AActor> WayPointClass;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	UStaticMeshComponent* BaseMesh;
