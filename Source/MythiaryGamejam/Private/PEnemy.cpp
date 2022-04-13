@@ -4,7 +4,7 @@
 #include "GameModeInfoCustomizer.h"
 #include "PActionTest.h"
 #include "PGameModeBase.h"
-#include "Vine.h"
+#include "PVine.h"
 #include "Kismet/GameplayStatics.h"
 
 APEnemy::APEnemy()
@@ -57,7 +57,7 @@ void APEnemy::OnBeginOverlap(UPrimitiveComponent* OverlappedComp, AActor* OtherA
                              int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
 {
 	UE_LOG(LogTemp,Warning,TEXT("yes"));
-	if(Cast<AVine>(OtherActor))
+	if(Cast<APVine>(OtherActor))
 	{
 		OtherActor->Destroy();
 	}

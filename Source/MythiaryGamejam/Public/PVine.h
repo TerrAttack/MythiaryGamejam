@@ -7,6 +7,8 @@
 #include "GameFramework/Pawn.h"
 #include "PVine.generated.h"
 
+class APVineSegment;
+
 UCLASS()
 class MYTHIARYGAMEJAM_API APVine : public APawn
 {
@@ -69,4 +71,19 @@ public:
 	void PlayerTurn();
 	UFUNCTION()
 	void OtherTurn();
+
+	UPROPERTY()
+	APVineSegment* VineHead;
+
+	UPROPERTY(EditAnywhere)
+	bool bDrawDirectionArrows = true;
+
+	UPROPERTY(EditAnywhere)
+	int32 MaxActions = 5;
+
+	UPROPERTY()
+	int32 ActionsLeft;
+
+	UFUNCTION()
+	void OnHurt();
 };
