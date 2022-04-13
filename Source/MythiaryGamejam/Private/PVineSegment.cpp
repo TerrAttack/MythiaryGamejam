@@ -45,4 +45,3 @@ void APVineSegment::PlantVine()
 		FlutVine->PlantVine();
 	}
 }
-
