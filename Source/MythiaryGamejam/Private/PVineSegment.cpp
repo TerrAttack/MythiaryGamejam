@@ -4,6 +4,7 @@
 #include "PVineSegment.h"
 
 #include "PVine.h"
+#include "Kismet/GameplayStatics.h"
 
 // Sets default values
 APVineSegment::APVineSegment()
@@ -29,9 +30,16 @@ void APVineSegment::Tick(float DeltaTime)
 
 void APVineSegment::OnHurt()
 {
+	auto FlutVine = Cast<APVine>(UGameplayStatics::GetActorOfClass(GetWorld(), APVine::StaticClass())) ;
+	if (FlutVine != nullptr)
+	{
+		FlutVine->OnHurt();
+	}
+	/*
 	if (Vine != nullptr)
 	{
 		Vine->OnHurt();
 	}
+	*/
 }
 

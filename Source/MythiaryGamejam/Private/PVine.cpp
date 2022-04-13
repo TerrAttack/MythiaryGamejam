@@ -103,7 +103,8 @@ void APVine::AddSegment(Direction MoveDirection)
 	{
 		const FRotator Orientation = MoveDirection == LastDirection ? GetStraightVineRotation(MoveDirection) : GetCurvedVineRotation(MoveDirection);
 		UClass* SpawnClass = MoveDirection == LastDirection ? VineSegmentStraightClass : VineSegmentCurveClass;
-		AActor* VineSegment = GetWorld()->SpawnActor<AActor>(SpawnClass, CurrentLocation, Orientation);
+		APVineSegment* VineSegment = GetWorld()->SpawnActor<APVineSegment>(SpawnClass, CurrentLocation, Orientation);
+		if (VineSegment != nullptr) VineSegment->Vine = this;
 		LastSegment = VineSegment;
 		LastDirection = MoveDirection;
 		VineParts.Add(VineSegment);
