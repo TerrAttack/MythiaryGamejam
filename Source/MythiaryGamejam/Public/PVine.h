@@ -41,6 +41,13 @@ public:
 	
 	DECLARE_DELEGATE_OneParam(FMoveInDirection, Direction);
 
+	/* Sounds */
+	UPROPERTY(EditAnywhere)
+   	USoundBase* MoveSound;
+	
+	UPROPERTY(EditAnywhere)
+   	USoundBase* DeathSound;	
+
 	/* Grid snapping length */
 	UPROPERTY(EditAnywhere)
 	float GridUnitLength = 100.f;
@@ -97,7 +104,7 @@ public:
 	UFUNCTION()
 	void PlantVine();
 	
-	UPROPERTY()
+	UPROPERTY(EditAnywhere)
 	FVector CurrentLocation = FVector::ZeroVector;
 
 	UFUNCTION()

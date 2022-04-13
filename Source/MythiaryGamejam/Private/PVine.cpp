@@ -211,6 +211,9 @@ void APVine::MoveVine(bool bToEnd)
 {
 	if (VineParts.IsEmpty()) return;
 	if (!bToEnd) CurrentLocation = VineParts[0]->GetActorLocation();
+
+	UGameplayStatics::PlaySoundAtLocation(GetWorld(),MoveSound,GetActorLocation(),GetActorRotation());
+
 	for (int32 i = VineParts.Num() - 1; i >= 0; i--)
 	{
 		AActor* Segment = VineParts[i];
@@ -226,6 +229,7 @@ void APVine::MoveVine(bool bToEnd)
 void APVine::OnHurt()
 {
 	UE_LOG(LogTemp, Display, TEXT("OOOOH NOOOOOOOO! VINE IS DED!"));
+	UGameplayStatics::PlaySoundAtLocation(GetWorld(),DeathSound,GetActorLocation(),GetActorRotation());
 	MoveVine(false);
 }
 
