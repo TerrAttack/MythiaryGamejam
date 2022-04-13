@@ -61,6 +61,7 @@ public:
 	AActor* LastSegment = nullptr;
 	
 	Direction LastDirection = Direction::UP;
+	UPROPERTY(EditAnywhere)
 	FVector CurrentLocation = {50.f,50.f,50.f};
 
 	UPROPERTY()
