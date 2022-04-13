@@ -60,7 +60,7 @@ public:
 	UPROPERTY()
 	AActor* LastSegment = nullptr;
 	
-	Direction LastDirection = Direction::INVALID;
+	Direction LastDirection = Direction::UP;
 	FVector CurrentLocation = {50.f,50.f,50.f};
 
 	UPROPERTY()
@@ -85,5 +85,23 @@ public:
 	int32 ActionsLeft;
 
 	UFUNCTION()
+	void MoveVine(bool bToEnd);
+	
+	UFUNCTION()
 	void OnHurt();
+	
+	UFUNCTION()
+	void PlantVine();
+
+	/*
+	TMap<Direction, int32> DirectionIndecis
+	{
+		{Direction::FORWARD, 1},
+		{Direction::RIGHT, 2},
+		{Direction::BACK, 3},
+		{Direction::LEFT, 4},
+		{Direction::DOWN, 0},
+		{Direction::UP, 0},
+	};
+	*/
 };

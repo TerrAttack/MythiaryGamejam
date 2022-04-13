@@ -51,6 +51,7 @@ void APVine::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 	PlayerInputComponent->BindAction<FMoveInDirection>(TEXT("MoveLeft"), IE_Pressed, this, &APVine::AttemptMoveInDirection, Direction::LEFT);
 	PlayerInputComponent->BindAction<FMoveInDirection>(TEXT("MoveRight"), IE_Pressed, this, &APVine::AttemptMoveInDirection, Direction::RIGHT);
 	PlayerInputComponent->BindAction(TEXT("TestFunc"), IE_Pressed, this, &APVine::OnHurt);
+	PlayerInputComponent->BindAction(TEXT("Plant"), IE_Pressed, this, &APVine::PlantVine);
 }
 
 void APVine::AttemptMoveInDirection(Direction MoveDirection)
@@ -103,7 +104,8 @@ void APVine::AddSegment(Direction MoveDirection)
 	{
 		const FRotator Orientation = MoveDirection == LastDirection ? GetStraightVineRotation(MoveDirection) : GetCurvedVineRotation(MoveDirection);
 		UClass* SpawnClass = MoveDirection == LastDirection ? VineSegmentStraightClass : VineSegmentCurveClass;
-		AActor* VineSegment = GetWorld()->SpawnActor<AActor>(SpawnClass, CurrentLocation, Orientation);
+		APVineSegment* VineSegment = GetWorld()->SpawnActor<APVineSegment>(SpawnClass, CurrentLocation, Orientation);
+		if (VineSegment != nullptr) VineSegment->Vine = this;
 		LastSegment = VineSegment;
 		LastDirection = MoveDirection;
 		VineParts.Add(VineSegment);
@@ -126,7 +128,6 @@ FRotator APVine::GetStraightVineRotation(Direction MoveDirection)
 	return Orientation;
 }
 
-/* Yandere Dev would be proud */
 FRotator APVine::GetCurvedVineRotation(Direction MoveDirection)
 {
 	FRotator Orientation = FRotator::ZeroRotator;
@@ -165,54 +166,30 @@ FRotator APVine::GetCurvedVineRotation(Direction MoveDirection)
 	
 	////////////////////
 
-	else if (LastDirection == Direction::FORWARD && MoveDirection == Direction::UP ||
-	LastDirection == Direction::DOWN && MoveDirection == Direction::BACK)
+	else if (MoveDirection == Direction::UP)
 	{
-		Orientation = {90,90,0};
-	}
-	
-	else if (LastDirection == Direction::LEFT && MoveDirection == Direction::UP ||
-	LastDirection == Direction::DOWN && MoveDirection == Direction::RIGHT)
-	{
-		Orientation = {90,0,0};
+		Orientation.Pitch = 90;
+		Orientation.Yaw = 90 + (uint8)LastDirection * 90;
 	}
 
-	else if (LastDirection == Direction::BACK && MoveDirection == Direction::UP ||
-	LastDirection == Direction::DOWN && MoveDirection == Direction::FORWARD)
+	else if (LastDirection == Direction::DOWN)
 	{
-		Orientation = {90,270,0};
-	}
-	
-	else if (LastDirection == Direction::RIGHT && MoveDirection == Direction::UP ||
-	LastDirection == Direction::DOWN && MoveDirection == Direction::LEFT)
-	{
-		Orientation = {90,180,0};
+		Orientation.Pitch = 90;
+		Orientation.Yaw = 270 + (uint8)MoveDirection * 90;
 	}
 
 	//////////////////////
-	
-	else if (LastDirection == Direction::UP && MoveDirection == Direction::RIGHT ||
-	LastDirection == Direction::LEFT && MoveDirection == Direction::DOWN)
+
+	else if (LastDirection == Direction::UP)
 	{
-		Orientation = {-90,0,0};
+		Orientation.Pitch = 270;
+		Orientation.Yaw = 270 + (uint8)MoveDirection * 90;
 	}
 
-	else if (LastDirection == Direction::UP && MoveDirection == Direction::BACK ||
-	LastDirection == Direction::FORWARD && MoveDirection == Direction::DOWN)
+	else if (MoveDirection == Direction::DOWN)
 	{
-		Orientation = {-90,90,0};
-	}
-
-	else if (LastDirection == Direction::UP && MoveDirection == Direction::LEFT ||
-	LastDirection == Direction::RIGHT && MoveDirection == Direction::DOWN)
-	{
-		Orientation = {-90,180,0};
-	}
-
-	else if (LastDirection == Direction::UP && MoveDirection == Direction::FORWARD ||
-	LastDirection == Direction::BACK && MoveDirection == Direction::DOWN)
-	{
-		Orientation = {-90,270,0};
+		Orientation.Pitch = 270;
+		Orientation.Yaw = 90 + (uint8)LastDirection * 90;
 	}
 	
 	return Orientation;
@@ -230,26 +207,32 @@ void APVine::OtherTurn()
 	UE_LOG(LogTemp, Display, TEXT("Other gets turn"));
 }
 
-void APVine::OnHurt()
+void APVine::MoveVine(bool bToEnd)
 {
-	UE_LOG(LogTemp, Display, TEXT("OOOOH NOOOOOOOO! VINE IS DED!"));
 	if (VineParts.IsEmpty()) return;
+	if (!bToEnd) CurrentLocation = VineParts[0]->GetActorLocation();
 	for (int32 i = VineParts.Num() - 1; i >= 0; i--)
 	{
 		AActor* Segment = VineParts[i];
-
-		if (i == 0)
-		{
-			CurrentLocation = Segment->GetActorLocation();
-			VineHead->SetActorLocation(CurrentLocation);
-			LastDirection = Direction::INVALID;
-			ActionsLeft = MaxActions;
-			
-		}
-
 		VineParts.Remove(Segment);
 		Segment->Destroy();
 	}
+	
+	VineHead->SetActorLocation(CurrentLocation);
+	LastDirection = Direction::UP;
+	ActionsLeft = MaxActions;
+}
+
+void APVine::OnHurt()
+{
+	UE_LOG(LogTemp, Display, TEXT("OOOOH NOOOOOOOO! VINE IS DED!"));
+	MoveVine(false);
+}
+
+void APVine::PlantVine()
+{
+	UE_LOG(LogTemp, Display, TEXT("TELEPORT! NYOOOOOOOM!"));
+	MoveVine(true);
 }
 
 
