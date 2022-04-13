@@ -30,4 +30,7 @@ public:
 
 	UFUNCTION()
 	void OnHurt();
+	
+	UFUNCTION(BlueprintCallable)
+	void PlantVine();
 };

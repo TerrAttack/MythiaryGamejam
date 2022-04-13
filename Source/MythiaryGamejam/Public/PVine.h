@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "PGameData.h"
+#include "Camera/CameraComponent.h"
 #include "GameFramework/Pawn.h"
 #include "PVine.generated.h"
 
@@ -43,6 +44,10 @@ public:
 	/* Grid snapping length */
 	UPROPERTY(EditAnywhere)
 	float GridUnitLength = 100.f;
+
+    /* Blueprint for ghost vine segments */
+	UPROPERTY(EditAnywhere)
+	TSubclassOf<AActor> VineSegmentGhostClass;
 
 	/* Blueprint for straight vine segments */
 	UPROPERTY(EditAnywhere)
@@ -93,16 +98,4 @@ public:
 	
 	UFUNCTION()
 	void PlantVine();
-
-	/*
-	TMap<Direction, int32> DirectionIndecis
-	{
-		{Direction::FORWARD, 1},
-		{Direction::RIGHT, 2},
-		{Direction::BACK, 3},
-		{Direction::LEFT, 4},
-		{Direction::DOWN, 0},
-		{Direction::UP, 0},
-	};
-	*/
 };
