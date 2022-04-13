@@ -43,5 +43,6 @@ void APVineSegment::PlantVine()
 	if (FlutVine != nullptr)
 	{
 		FlutVine->PlantVine();
+		FlutVine->MoveSprite();
 	}
 }

@@ -96,4 +96,10 @@ public:
 	
 	UFUNCTION()
 	void PlantVine();
+	
+	UPROPERTY()
+	FVector CurrentLocation = FVector::ZeroVector;
+
+	UFUNCTION()
+	void MoveSprite();
 };
