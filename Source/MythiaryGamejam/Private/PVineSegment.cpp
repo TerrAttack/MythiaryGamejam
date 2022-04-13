@@ -37,3 +37,12 @@ void APVineSegment::OnHurt()
 	}
 }
 
+void APVineSegment::PlantVine()
+{
+	auto FlutVine = Cast<APVine>(UGameplayStatics::GetActorOfClass(GetWorld(), APVine::StaticClass())) ;
+	if (FlutVine != nullptr)
+	{
+		FlutVine->PlantVine();
+	}
+}
+

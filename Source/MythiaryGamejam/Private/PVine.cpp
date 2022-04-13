@@ -23,8 +23,8 @@ void APVine::BeginPlay()
 {
 	Super::BeginPlay();
 	ActionsLeft = MaxActions;
-	if (VineSegmentStraightClass == nullptr) return;
-	VineHead = GetWorld()->SpawnActor<APVineSegment>(VineSegmentStraightClass, CurrentLocation, FRotator::ZeroRotator);
+	if (VineSegmentGhostClass == nullptr) return;
+	VineHead = GetWorld()->SpawnActor<APVineSegment>(VineSegmentGhostClass, CurrentLocation, FRotator::ZeroRotator);
 }
 
 // Called every frame
