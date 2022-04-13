@@ -33,9 +33,9 @@ void APGameModeBase::LoadLevel(const FName LevelName) const
 	UGameplayStatics::OpenLevel(GetWorld(), LevelName, false);
 }
 
-void APGameModeBase::ReloadCurrentLevel() const
+void APGameModeBase::ReloadCurrentLevel()
 {
-	UGameplayStatics::OpenLevel(GetWorld(),FName(*GetWorld()->GetName()), false);
+	LoadLevel(LevelNames[CheckCurrentLevelIndex()]);
 }
 
 void APGameModeBase::NextLevel()

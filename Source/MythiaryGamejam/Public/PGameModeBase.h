@@ -32,7 +32,7 @@ public:
 	UFUNCTION(BlueprintCallable)
 	void LoadLevel(const FName LevelName) const;
 	UFUNCTION(BlueprintCallable)
-	void ReloadCurrentLevel() const;
+	void ReloadCurrentLevel();
 	UFUNCTION(BlueprintCallable)
 	void NextLevel();
 
